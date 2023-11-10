@@ -1,10 +1,12 @@
+require('dotenv').config()
+
 const express = require('express');
 const app = express();
-const PORT = 4000;
-
+const PORT = process.env.LISTENING_PORT
 //New imports
 const http = require('http').Server(app);
 const cors = require('cors');
+
 let clients = []
 
 app.use(cors());
@@ -31,9 +33,9 @@ socketIO.on('connection', (socket) => {
     })
   })
 
-  socket.on('disconnect', () => {
+  socket.on('disconnect', (reason) => {
     clients = clients.filter((id) => id != socket.id)
-    console.log('🔥: A user disconnected');
+    console.log('🔥: A user disconnected: ', reason);
   });
 });
 
