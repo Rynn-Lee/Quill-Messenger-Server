@@ -6,17 +6,20 @@ const DBactions = (client, collectionName) => {
     const isUserExist = await findUser(query.usertag)
     if(isUserExist){console.log("exist"); return {message: "User Already Exists", status: 400}}
 
-    const result = await collection.insertOne({
+    const insertData = {
       usertag: query.usertag,
       password: query.password,
       displayedName: query.usertag,
       lastOnline: false,
-    }, (err, result) => {
+      isOnline: false
+    }
+
+    const result = await collection.insertOne(insertData, (err, result) => {
       if(err){errorLog(err); throw new Error(err)}
       return {message: "success"}
     })
 
-    return result
+    return insertData
   }
 
   const login = async(query) => {

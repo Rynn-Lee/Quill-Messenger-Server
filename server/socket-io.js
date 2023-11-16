@@ -16,12 +16,6 @@ const socketConnection = (http) => {
       socket.emit('connectedUsers', clients)
     })
   
-    socket.on('disconnectAll', ()=>{
-      socketIO.sockets.sockets.map((user)=>{
-        user.di
-      })
-    })
-  
     socket.on('disconnect', (reason) => {
       clients = clients.filter((id) => id != socket.id)
       console.log('🔥: A user disconnected: ', reason);

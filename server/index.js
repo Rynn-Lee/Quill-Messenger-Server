@@ -30,8 +30,7 @@ app.get('/login', async(req, res) => {
   res.status(result.status ? result.status : 200).json({ message: result })
 })
 
-
-
+// Run the server
 http.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
