@@ -14,7 +14,7 @@ const DBactions = (client, collectionName) => {
       isOnline: false
     }
 
-    const result = await collection.insertOne(insertData, (err, result) => {
+    await collection.insertOne(insertData, (err, result) => {
       if(err){errorLog(err); throw new Error(err)}
       return {message: "success"}
     })
@@ -26,7 +26,6 @@ const DBactions = (client, collectionName) => {
     if(!query.usertag || !query.password){return {message: "Usertag and Password are required!", status: 400}}
     const result = await findUser(query.usertag)
     if(!result){console.log("doesn't exist"); return {message: "User doesn't exist!", status: 400}}
-    console.log(query.password, result.password)
     if(query.password != result.password){return {message: "Incorrect password!", status: 403}}
     return result
   }
