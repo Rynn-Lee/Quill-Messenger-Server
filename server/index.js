@@ -7,7 +7,6 @@ const dbaction = require('../database/DBactions')
 const bodyParser = require('body-parser')
 require('dotenv').config()
 require('./socket-io')(http)
-const PORT = process.env.LISTENING_PORT
 
 const accountCollection = client.collection('accounts')
 
@@ -31,6 +30,6 @@ app.get('/login', async(req, res) => {
 })
 
 // Run the server
-http.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+http.listen(4000, () => {
+  console.log(`Server listening on ${4000}`);
 });
