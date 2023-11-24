@@ -1,9 +1,11 @@
 let clients = []
+const port = process.env.CLIENT_LISTEN_PORT
+console.log("port:", port)
 
 const socketConnection = (http) => {
   const socketIO = require('socket.io')(http, {
     cors: {
-        origin: "http://localhost:3000"
+        origin: `http://localhost:${port}`
     }
   });
   
