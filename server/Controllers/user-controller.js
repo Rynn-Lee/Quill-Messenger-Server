@@ -46,6 +46,7 @@ const loginUser = async(req, res) =>{
       return res.status(400).json({message: "Incorrect Password or Usertag"})
 
     res.status(200).json({
+      _id: user._id,
       usertag,
       displayedName: usertag,
       lastOnline: Date.now(),
