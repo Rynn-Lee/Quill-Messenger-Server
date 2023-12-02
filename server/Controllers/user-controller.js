@@ -24,10 +24,9 @@ const registerUser = async(req, res) => {
     })
 
     user.password = md5(password)
+    await user.save().then((newuser) => {user._id = newuser._id})
 
-    await user.save()
-
-    res.status(200).json({usertag, displayedName: usertag, lastOnline: Date.now(), isOnline: false})
+    res.status(200).json({_id: user._id, usertag, displayedName: usertag, lastOnline: Date.now(), isOnline: false})
   } catch(error) {
     console.log("An error occured on the server-side!", error)
     res.status(500).json({message: error})
@@ -66,6 +65,28 @@ const findUser = async(req, res) => {
     if(!user)
       return res.status(400).json({message: "No such user found!"})
     res.status(200).json({
+      _id: user._id,
+      usertag: user.usertag,
+      displayedName: user.displayedName,
+      lastOnline: user.lastOnline,
+      isOnline: user.isOnline
+    })
+  } catch (error) {
+    console.log("An error occured on the server-side!", "Unsusual '_id' lenght was asked for!")
+    res.status(500).json({message: "Unsusual '_id' lenght was asked for!"})
+  }
+}
+
+
+const findUserTag = async(req, res) => {
+  const {userTag} = req.params
+
+  try{
+    const user = await userModel.findOne({usertag: userTag})
+    if(!user)
+      return res.status(400).json({message: "No such user found!"})
+    res.status(200).json({
+      _id: user._id,
       usertag: user.usertag,
       displayedName: user.displayedName,
       lastOnline: user.lastOnline,
@@ -81,6 +102,7 @@ const getUsers = async(req, res) => {
   try{
     const user = await userModel.find()
     const filtered = user && user.map((item)=>({
+      _id: item._id,
       usertag: item.usertag,
       displayedName: item.displayedName,
       lastOnline: item.lastOnline,
@@ -96,4 +118,4 @@ const getUsers = async(req, res) => {
 
 
 
-module.exports = {registerUser, loginUser, findUser, getUsers}
+module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag}
