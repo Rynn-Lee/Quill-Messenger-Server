@@ -20,13 +20,14 @@ const registerUser = async(req, res) => {
       usertag,
       displayedName: usertag,
       lastOnline: Date.now(),
-      isOnline: false
+      isOnline: false,
+      avatar: "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
     })
 
     user.password = md5(password)
     await user.save().then((newuser) => {user._id = newuser._id})
 
-    res.status(200).json({_id: user._id, usertag, displayedName: usertag, lastOnline: Date.now(), isOnline: false})
+    res.status(200).json({_id: user._id, usertag, displayedName: usertag, lastOnline: Date.now(), isOnline: false, avatar: user.avatar})
   } catch(error) {
     console.log("An error occured on the server-side!", error)
     res.status(500).json({message: error})
@@ -49,7 +50,8 @@ const loginUser = async(req, res) =>{
       usertag,
       displayedName: usertag,
       lastOnline: Date.now(),
-      isOnline: false
+      isOnline: false,
+      avatar: user.avatar
     })
   } catch (error) {
     console.log("An error occured on the server-side!", error)
@@ -69,7 +71,8 @@ const findUser = async(req, res) => {
       usertag: user.usertag,
       displayedName: user.displayedName,
       lastOnline: user.lastOnline,
-      isOnline: user.isOnline
+      isOnline: user.isOnline,
+      avatar: user.avatar
     })
   } catch (error) {
     console.log("An error occured on the server-side!", "Unsusual '_id' lenght was asked for!")
@@ -90,7 +93,8 @@ const findUserTag = async(req, res) => {
       usertag: user.usertag,
       displayedName: user.displayedName,
       lastOnline: user.lastOnline,
-      isOnline: user.isOnline
+      isOnline: user.isOnline,
+      avatar: user.avatar
     })
   } catch (error) {
     console.log("An error occured on the server-side!", "Unsusual '_id' lenght was asked for!")
@@ -106,7 +110,8 @@ const getUsers = async(req, res) => {
       usertag: item.usertag,
       displayedName: item.displayedName,
       lastOnline: item.lastOnline,
-      isOnline: item.isOnline
+      isOnline: item.isOnline,
+      avatar: user.avatar
     }))
 
     res.status(200).json(filtered)
@@ -116,6 +121,19 @@ const getUsers = async(req, res) => {
   }
 }
 
+const updateUser = async(req, res) => {
+  const newData = req.body
+  if(!newData._id){
+    return res.status(400).json({message: "Invalid set of data"})
+  }
+  console.log(newData)
+  try{
+    const updated = await userModel.findByIdAndUpdate(newData._id, newData)
+    res.status(200).json({...updated, ...newData})
+  } catch (error) {
+    console.log("An error occured on the server-side!", error)
+    res.status(500).json({message: error})
+  }
+}
 
-
-module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag}
+module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag, updateUser}
