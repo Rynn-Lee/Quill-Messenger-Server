@@ -19,15 +19,29 @@ const socketConnection = (http) => {
       socket.disconnect()
       return
     }
+    addId({userid: user, socketid: socket.id})
 
-    socket.on('connectDevice', (data) => {
-      console.log("Connected user data", data)
-      addId({usertag: data.usertag, _id: socket.id})
+    socket.on('newMessage', (data) => {
+      console.log("Data received", {...data})
+      if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
+      console.log("There are registered instances!", connectedUsers[data.recipientID])
+      
+      for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
+        socketIO.to(connectedUsers[data.recipientID][i]).emit('newMessage', data.message)
+      }
     })
 
-    socket.on('getConnectedUsers', ()=>{
+    socket.on('typing', (data) => {
+      if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
+      console.log("Typing for:", connectedUsers[data.recipientID])
+      for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
+        socketIO.to(connectedUsers[data.recipientID][i]).emit('typing', data)
+      }
+    })
+
+    socket.on('getOnlineUsers', ()=>{
       console.log("User", socket.id, "asked for connected clients")
-      socket.emit('connectedUsers', connectedUsers)
+      socket.emit('onlineUsers', connectedUsers)
     })
   
     socket.on('disconnect', (reason) => {
@@ -38,11 +52,11 @@ const socketConnection = (http) => {
 }
 
 const addId = (data) => {
-  if (!connectedUsers[data.usertag]) {
-    connectedUsers[data.usertag] = [];
+  if (!connectedUsers[data.userid]) {
+    connectedUsers[data.userid] = [];
   }
-  connectedUsers[data.usertag].push(data._id);
-  console.log("connectedUsers", connectedUsers)
+  connectedUsers[data.userid].push(data.socketid);
+  console.log("🧐 Connected users: ", connectedUsers)
 }
 
 // Function to remove an id from a user
