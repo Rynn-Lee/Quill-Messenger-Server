@@ -1,8 +1,3 @@
-const { findUser } = require('./Controllers/user-controller');
-
-const port = process.env.CLIENT_LISTEN_PORT
-console.log("port:", port)
-
 let connectedUsers = {}
 
 const socketConnection = (http) => {
@@ -22,10 +17,8 @@ const socketConnection = (http) => {
     addId({userid: user, socketid: socket.id})
 
     socket.on('newMessage', (data) => {
-      console.log("Data received", {...data})
       if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
-      console.log("There are registered instances!", connectedUsers[data.recipientID])
-      
+    
       for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
         socketIO.to(connectedUsers[data.recipientID][i]).emit('newMessage', data.message)
       }
@@ -33,7 +26,6 @@ const socketConnection = (http) => {
 
     socket.on('typing', (data) => {
       if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
-      console.log("Typing for:", connectedUsers[data.recipientID])
       for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
         socketIO.to(connectedUsers[data.recipientID][i]).emit('typing', data)
       }
@@ -45,8 +37,8 @@ const socketConnection = (http) => {
     })
   
     socket.on('disconnect', (reason) => {
-      removeId(socket.id)
       console.log('🔥: A user disconnected: ', reason);
+      removeId(socket.id)
     });
   });
 }
@@ -68,7 +60,7 @@ const removeId = (id) => {
       break;
     }
   }
-  console.log("connectedUsers", connectedUsers)
+  console.log("🧐 Connected users:", connectedUsers)
 }
 
 module.exports = (http) => socketConnection(http)

@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "CLIENT_LISTEN_PORT=3000 nodemon ./server/index.js",
-    "prod": "CLIENT_LISTEN_PORT=13131 nodemon ./server/index.js",
+    "dev": "nodemon ./server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

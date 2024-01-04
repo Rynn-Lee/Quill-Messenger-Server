@@ -25,4 +25,15 @@ const getMessages = async(req, res) => {
   }
 }
 
-module.exports = {createMessage, getMessages}
+const getLastestMessage = async(req, res) => {
+  const {chatID} = req.params
+  try{
+    const messages = await messageModel.find({chatID}).limit(20)
+    res.status(200).json(messages)
+  } catch (error) {
+    console.log("An error occured on the server side!", error)
+    res.status(500).json({message: error})
+  }
+}
+
+module.exports = {createMessage, getMessages, getLastestMessage}

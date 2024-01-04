@@ -48,7 +48,7 @@ const loginUser = async(req, res) =>{
     res.status(200).json({
       _id: user._id,
       usertag,
-      displayedName: usertag,
+      displayedName: user.displayedName,
       lastOnline: Date.now(),
       isOnline: false,
       avatar: user.avatar
