@@ -28,7 +28,7 @@ const getMessages = async(req, res) => {
 const getLastestMessage = async(req, res) => {
   const {chatID} = req.params
   try{
-    const messages = await messageModel.find({chatID}).sort({_id:-1}).limit(20)
+    const messages = await messageModel.find({chatID}).sort({_id:-1}).limit(1)
     res.status(200).json(messages)
   } catch (error) {
     console.log("An error occured on the server side!", error)

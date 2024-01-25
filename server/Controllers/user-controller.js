@@ -19,15 +19,13 @@ const registerUser = async(req, res) => {
     user = new userModel({
       usertag,
       displayedName: usertag,
-      lastOnline: Date.now(),
-      isOnline: false,
       avatar: "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
     })
 
     user.password = md5(password)
     await user.save().then((newuser) => {user._id = newuser._id})
 
-    res.status(200).json({_id: user._id, usertag, displayedName: usertag, lastOnline: Date.now(), isOnline: false, avatar: user.avatar})
+    res.status(200).json({_id: user._id, usertag, displayedName: usertag, avatar: user.avatar})
   } catch(error) {
     console.log("An error occured on the server-side!", error)
     res.status(500).json({message: error})
@@ -49,8 +47,6 @@ const loginUser = async(req, res) =>{
       _id: user._id,
       usertag,
       displayedName: user.displayedName,
-      lastOnline: Date.now(),
-      isOnline: false,
       avatar: user.avatar
     })
   } catch (error) {
@@ -70,8 +66,6 @@ const findUser = async(req, res) => {
       _id: user._id,
       usertag: user.usertag,
       displayedName: user.displayedName,
-      lastOnline: user.lastOnline,
-      isOnline: user.isOnline,
       avatar: user.avatar
     })
   } catch (error) {
@@ -92,8 +86,6 @@ const findUserTag = async(req, res) => {
       _id: user._id,
       usertag: user.usertag,
       displayedName: user.displayedName,
-      lastOnline: user.lastOnline,
-      isOnline: user.isOnline,
       avatar: user.avatar
     })
   } catch (error) {
@@ -109,8 +101,6 @@ const getUsers = async(req, res) => {
       _id: item._id,
       usertag: item.usertag,
       displayedName: item.displayedName,
-      lastOnline: item.lastOnline,
-      isOnline: item.isOnline,
       avatar: user.avatar
     }))
 

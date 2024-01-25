@@ -3,7 +3,7 @@ let connectedUsers = {}
 const socketConnection = (http) => {
   const socketIO = require('socket.io')(http, {
     cors: {
-        origin: [`http://localhost:3000`, `http://localhost:3001`, `http://localhost:19000`, `http://localhost:13131`]
+        origin: [`http://localhost:3000`, `http://localhost:3001`, `http://localhost:19000`, `http://localhost:13131`, `exp://192.168.2.100:8081`, `http://192.168.2.100:19006`, `exp://localhost:8081`, `http://localhost:19006`]
     }
   });
   
