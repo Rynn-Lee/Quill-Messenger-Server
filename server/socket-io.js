@@ -3,7 +3,7 @@ let connectedUsers = {}
 const socketConnection = (http) => {
   const socketIO = require('socket.io')(http, {
     cors: {
-        origin: [`http://localhost:3000`, `http://localhost:3001`, `http://localhost:19000`, `http://localhost:13131`, `exp://192.168.2.100:8081`, `http://192.168.2.100:19006`, `exp://localhost:8081`, `http://localhost:19006`]
+        origin: [`http://localhost:3000`, `http://localhost:3001`, `http://localhost:19000`, `http://localhost:13131`, `http://192.168.2.100:3000`, `exp://192.168.2.100:8081`,`exp://192.168.2.100:8082`, `http://192.168.2.100:19006`, `exp://localhost:8081`, `http://localhost:19006`]
     }
   });
   
@@ -26,6 +26,7 @@ const socketConnection = (http) => {
 
     socket.on('typing', (data) => {
       if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
+      console.log("typing", data)
       for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
         socketIO.to(connectedUsers[data.recipientID][i]).emit('typing', data)
       }
