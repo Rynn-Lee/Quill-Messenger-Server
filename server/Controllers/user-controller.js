@@ -101,7 +101,8 @@ const getUsers = async(req, res) => {
       _id: item._id,
       usertag: item.usertag,
       displayedName: item.displayedName,
-      avatar: user.avatar
+      avatar: item.avatar,
+      createdAt: item.createdAt
     }))
 
     res.status(200).json(filtered)

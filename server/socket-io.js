@@ -24,6 +24,12 @@ const socketConnection = (http) => {
       }
     })
 
+    socket.on('removeMessage', (data) => {
+      if(!data.messageID){ return }
+      console.log("removeMessage", data)
+      socketIO.emit('removeMessage', data.messageID)
+    })
+
     socket.on('typing', (data) => {
       if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
       console.log("typing", data)
