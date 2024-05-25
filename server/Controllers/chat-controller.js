@@ -50,4 +50,14 @@ const findChat = async(req, res) => {
   }
 }
 
-module.exports = {createChat, findUserChats, findChat}
+const removeChat = async(req, res) => {
+  const {chatID} = req.params
+  try{
+    const response = await chatModel.findByIdAndDelete(chatID)
+    res.status(200).json(response)
+  } catch (error) {
+    console.log("An error occured on the server side!", error)
+    res.status(500).json({message: error})
+  }
+}
+module.exports = {createChat, findUserChats, findChat, removeChat}

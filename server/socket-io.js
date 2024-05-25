@@ -42,6 +42,14 @@ const socketConnection = (http) => {
       console.log("User", socket.id, "asked for connected clients")
       socket.emit('onlineUsers', connectedUsers)
     })
+
+    socket.on('removeChat', (data) => {
+      if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
+      console.log("removeChat", data)
+      for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
+        socketIO.to(connectedUsers[data.recipientID][i]).emit('removeChat', data)
+      }
+    })
   
     socket.on('disconnect', (reason) => {
       console.log('🔥: A user disconnected: ', reason);
