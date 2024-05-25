@@ -24,7 +24,6 @@ const createChat = async(req, res) => {
 
 const findUserChats = async(req, res) => {
   const {userID} = req.params
-
   try{
     const chats = await chatModel.find({
       members: {$in: [userID]}

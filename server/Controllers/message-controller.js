@@ -1,13 +1,25 @@
 const messageModel = require("../Models/message-model")
 
 const createMessage = async(req, res) => {
-  const {chatID, senderID, text} = req.body
-  const message = new messageModel({
-    chatID, senderID, text
-  })
+  const {chatID, senderID, type, text} = req.body
+  let result
+  if (type === 'text') { result = text }
+  else if (type === 'media') {
+    result = {
+      format: text.format,
+      code: text.code,
+    }
+  } else if (type === 'media-text') {
+    result = {
+      format: text.format,
+      code: text.code,
+      text: text.text,
+    }
+  }
+  const message = new messageModel({chatID, senderID, type, text: result})
   try{
     const response = await message.save()
-    res.status(200).json({_id: response.id, chatID, senderID, text, createdAt: response.createdAt, updatedAt: response.updatedAt})
+    res.status(200).json({_id: response.id, chatID, senderID, type, text, createdAt: response.createdAt, updatedAt: response.updatedAt})
   } catch (error) {
     console.log("An error occured on the server side!", error)
     res.status(500).json({message: error})
