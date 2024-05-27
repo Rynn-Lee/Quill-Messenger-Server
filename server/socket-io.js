@@ -44,13 +44,18 @@ const socketConnection = (http) => {
     })
 
     socket.on('removeChat', (data) => {
-      if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
       console.log("removeChat", data)
+      if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
       for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
-        socketIO.to(connectedUsers[data.recipientID][i]).emit('removeChat', data)
+        socketIO.to(connectedUsers[data.recipientID][i]).emit('removeChat', {chatID: data.chatID})
       }
     })
   
+    socket.on('userDeleted', (data) => {
+      console.log("userDeleted", data)
+      socket.broadcast.emit('userDeleted', data)
+    })
+
     socket.on('disconnect', (reason) => {
       console.log('🔥: A user disconnected: ', reason);
       removeId(socket.id)

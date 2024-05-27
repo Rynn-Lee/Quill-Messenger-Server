@@ -1,4 +1,5 @@
 const chatModel = require('../Models/chat-model')
+const messageModel = require('../Models/message-model')
 
 const createChat = async(req, res) => {
   const {firstID, secondID} = req.body
@@ -53,8 +54,10 @@ const findChat = async(req, res) => {
 const removeChat = async(req, res) => {
   const {chatID} = req.params
   try{
-    const response = await chatModel.findByIdAndDelete(chatID)
-    res.status(200).json(response)
+    console.log("Deleting dis shit")
+    await chatModel.findByIdAndDelete(chatID)
+    await messageModel.deleteMany({chatID})
+    res.status(200).json({message: 'ok!'})
   } catch (error) {
     console.log("An error occured on the server side!", error)
     res.status(500).json({message: error})

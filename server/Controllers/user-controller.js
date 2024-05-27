@@ -1,3 +1,5 @@
+const chatModel = require("../Models/chat-model")
+const messageModel = require("../Models/message-model")
 const userModel = require("../Models/user-model")
 const md5 = require('md5')
 
@@ -66,7 +68,8 @@ const findUser = async(req, res) => {
       _id: user._id,
       usertag: user.usertag,
       displayedName: user.displayedName,
-      avatar: user.avatar
+      avatar: user.avatar,
+      createdAt: user.createdAt
     })
   } catch (error) {
     console.log("An error occured on the server-side!", "Unsusual '_id' lenght was asked for!")
@@ -86,7 +89,8 @@ const findUserTag = async(req, res) => {
       _id: user._id,
       usertag: user.usertag,
       displayedName: user.displayedName,
-      avatar: user.avatar
+      avatar: user.avatar,
+      createdAt: user.createdAt
     })
   } catch (error) {
     console.log("An error occured on the server-side!", "Unsusual '_id' lenght was asked for!")
@@ -95,6 +99,7 @@ const findUserTag = async(req, res) => {
 }
 
 const getUsers = async(req, res) => {
+  console.log("REQUEST!!!")
   try{
     const user = await userModel.find()
     const filtered = user && user.map((item)=>({
@@ -127,4 +132,18 @@ const updateUser = async(req, res) => {
   }
 }
 
-module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag, updateUser}
+const deleteUser = async(req, res) => {
+  const {userId} = req.params
+  try{
+    await userModel.findByIdAndDelete(userId)
+    await chatModel.deleteMany({members: {$in: [userId]}})
+    await messageModel.deleteMany({senderID: {$in: [userId]}})
+    console.log("WIPED OUT!")
+    res.status(200).json({message: 'ok!'})
+  } catch (error) {
+    console.log("An error occured on the server side!", error)
+    res.status(500).json({message: error})
+  }
+}
+
+module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag, updateUser, deleteUser}

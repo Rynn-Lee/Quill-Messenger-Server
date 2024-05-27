@@ -6,6 +6,6 @@ const chatRoutes = express.Router();
 chatRoutes.post('/create', createChat)
 chatRoutes.get('/:userID', findUserChats)
 chatRoutes.get('/find/:firstID/:secondID', findChat)
-chatRoutes.get('/delete:chatID', removeChat)
+chatRoutes.get('/delete/:chatID', removeChat)
 
 module.exports = chatRoutes
