@@ -146,4 +146,16 @@ const deleteUser = async(req, res) => {
   }
 }
 
-module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag, updateUser, deleteUser}
+const getRandomUser = async(req, res) => {
+  const {userId} = req.query
+  try{
+    const users = await userModel.find({_id: {$ne: userId}})
+    const randomUser = users[Math.floor(Math.random() * users.length)]
+    res.status(200).json(randomUser)
+  } catch (error) {
+    console.log("An error occured on the server side!", error)
+    res.status(500).json({message: error})
+  }
+}
+
+module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag, updateUser, deleteUser, getRandomUser}

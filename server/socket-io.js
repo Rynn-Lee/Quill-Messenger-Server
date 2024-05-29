@@ -44,7 +44,6 @@ const socketConnection = (http) => {
     })
 
     socket.on('removeChat', (data) => {
-      console.log("removeChat", data)
       if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
       for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
         socketIO.to(connectedUsers[data.recipientID][i]).emit('removeChat', {chatID: data.chatID})
