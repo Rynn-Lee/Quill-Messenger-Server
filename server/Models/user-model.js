@@ -4,7 +4,10 @@ const userSchema = new mongoose.Schema({
   usertag: {type: String, required: true, minlength: 3, maxlength: 30, unique: true},
   password: {type: String, required: true, minlength: 8, maxlength: 50},
   displayedName: {type: String, required: true, minlength: 3, maxlength: 30},
-  avatar: {type: String}
+  avatar: {
+    format: {type: String},
+    code: {type: String},
+  }
 }, {
   timestamps: true
 })

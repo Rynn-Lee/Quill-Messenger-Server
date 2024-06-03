@@ -2,7 +2,7 @@ const groupModel = require('../Models/group-model')
 
 const createGroup = async(req, res) => {
   const {name, image, usersID} = req.body
-
+  console.log("CREATE GROUP", name, image, usersID)
   try{
     const group = await groupModel.findOne({
       name, image, members: {$all: usersID}

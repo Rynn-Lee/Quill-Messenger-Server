@@ -122,7 +122,6 @@ const updateUser = async(req, res) => {
   if(!newData._id){
     return res.status(400).json({message: "Invalid set of data"})
   }
-  console.log(newData)
   try{
     const updated = await userModel.findByIdAndUpdate(newData._id, newData)
     res.status(200).json({...updated, ...newData})
