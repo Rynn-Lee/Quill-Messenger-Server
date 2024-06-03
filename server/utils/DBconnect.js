@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-
-// const url = 'mongodb://localhost:27017/quill-messenger'
-const url = 'mongodb+srv://DiplomaDB:123123123123@diplomacluster.cshxctx.mongodb.net/?retryWrites=true&w=majority&appName=DiplomaCluster'
+require('dotenv').config()
+const url = process.env.DB_CONNECT
 
 mongoose.connect(url).then(()=>{
   console.log("MONGO DB: Connected to database!")
