@@ -1,10 +1,8 @@
 const express = require('express');
 const app = express();
-// const http = require('http').Server(app);
+const http = require('http').Server(app);
 const cors = require('cors');
-const {createServer} = require('http')
-const {Server} = require("socket.io")
-const httpServer = createServer(app)
+
 // Routes
 const userRoutes = require('./Routes/user-routes');
 const chatRoutes = require('./Routes/chat-routes');
@@ -14,7 +12,7 @@ const groupRoutes = require('./Routes/group-routes');
 require('./middleware/request-logger')
 require('./utils/DBconnect');
 require('dotenv').config()
-require('./socket-io')(Server, httpServer)
+require('./socket-io')(http)
 
 // Libraries
 app.use(cors());
@@ -33,6 +31,6 @@ app.use("/api/message", messageRoutes)
 app.use("/api/group", groupRoutes)
 
 // Run the server
-// http.listen(4000, () => {
-//   console.log(`Server listening on ${4000}`);
-// });
+http.listen(4000, () => {
+  console.log(`Server listening on ${4000}`);
+});

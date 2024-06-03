@@ -1,10 +1,10 @@
 let connectedUsers = {}
 
-const socketConnection = (Server, httpServer) => {
-  const socketIO = new Server(httpServer, {
+const socketConnection = (http) => {
+  const socketIO = require('socket.io')(http, {
     cors: {
-        origin: [`https://quill-messenger-server.onrender.com`]
-        // origin: [`http://localhost:3000`, `http://localhost:3001`, `http://localhost:19000`, `http://localhost:13131`, `http://192.168.2.100:3000`, `exp://192.168.2.100:8081`,`exp://192.168.2.100:8082`, `http://192.168.2.100:19006`, `exp://localhost:8081`, `http://localhost:19006`]
+        // origin: [`https://quill-messenger-server.onrender.com:4000`]
+        origin: process.env.ORIGINS
     }
   });
   
