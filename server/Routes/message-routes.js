@@ -6,6 +6,6 @@ const messageRoutes = express.Router();
 messageRoutes.post('/send', createMessage)
 messageRoutes.get('/:chatID', getMessages)
 messageRoutes.get('/findLatest/:chatID', getLastestMessage)
-messageRoutes.get('/removeMessage/:messageID', removeMessage)
+messageRoutes.get('/remove/:messageID', removeMessage)
 
 module.exports = messageRoutes

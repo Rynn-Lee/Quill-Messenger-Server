@@ -4,7 +4,7 @@ const socketConnection = (http) => {
   const socketIO = require('socket.io')(http, {
     cors: {
         // origin: [`https://quill-messenger-server.onrender.com:4000`]
-        origin: process.env.ORIGINS
+        origin: [`http://0.0.0.0:3000`, 'http://0.0.0.0:3001',`http://localhost:3000`, `http://localhost:3001`, `http://localhost:19000`, `http://localhost:13131`, `http://192.168.2.100:3000`, `exp://192.168.2.100:8081`,`exp://192.168.2.100:8082`, `http://192.168.2.100:19006`, `exp://localhost:8081`, `http://localhost:19006`]
     }
   });
   
@@ -18,24 +18,37 @@ const socketConnection = (http) => {
     addId({userid: user, socketid: socket.id})
 
     socket.on('newMessage', (data) => {
-      if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
-    
-      for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
-        socketIO.to(connectedUsers[data.recipientID][i]).emit('newMessage', data.message)
+      console.log("MESSAGE", data)
+      if(!data?.recipientID?.length){ return }
+      for(let i = 0; i < data.recipientID.length; i++){
+        if (!connectedUsers[data.recipientID[i]]) { continue }
+        for(let j = 0; j < connectedUsers[data.recipientID[i]].length; j++){
+          socketIO.to(connectedUsers[data.recipientID[i]][j]).emit('newMessage', data.message)
+        }
       }
     })
 
     socket.on('removeMessage', (data) => {
       if(!data.messageID){ return }
       console.log("removeMessage", data)
-      socketIO.emit('removeMessage', data.messageID)
+      for(let i = 0; i < data.recipientID.length; i++){
+        if (!connectedUsers[data.recipientID[i]]) { continue }
+        for(let j = 0; j < connectedUsers[data.recipientID[i]].length; j++){
+          socketIO.to(connectedUsers[data.recipientID[i]][j]).emit('removeMessage', {chatID: data.chatID, _id: data.messageID})
+        }
+      }
     })
 
     socket.on('typing', (data) => {
-      if(!connectedUsers[data.recipientID] || !connectedUsers[data.recipientID].length){ return }
+      console.log("TYPING", data)
+      if(!data?.recipientID?.length){ return }
       console.log("typing", data)
-      for(let i = 0; i < connectedUsers[data.recipientID].length; i++){
-        socketIO.to(connectedUsers[data.recipientID][i]).emit('typing', data)
+      
+      for(let i = 0; i < data.recipientID.length; i++){
+        if (!connectedUsers[data.recipientID[i]]) { continue }
+        for(let j = 0; j < connectedUsers[data.recipientID[i]].length; j++){
+          socketIO.to(connectedUsers[data.recipientID[i]][j]).emit('typing', data)
+        }
       }
     })
 

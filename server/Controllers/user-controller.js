@@ -2,6 +2,7 @@ const chatModel = require("../Models/chat-model")
 const messageModel = require("../Models/message-model")
 const userModel = require("../Models/user-model")
 const md5 = require('md5')
+const axios = require('axios')
 
 const registerUser = async(req, res) => {
   const { usertag, password } = req.body
@@ -18,10 +19,17 @@ const registerUser = async(req, res) => {
     let user = await userModel.findOne({usertag: usertag})
     if(user)
       return res.status(400).json({message: "The usertag is already taken!"})
+
+    const response = await axios.get("https://cdn-icons-png.flaticon.com/512/6596/6596121.png", {responseType: 'arraybuffer'})
+    const base64= Buffer.from(response.data, 'binary').toString('base64')
+    const formatted = `data:image/png;base64,${base64}`
     user = new userModel({
       usertag,
       displayedName: usertag,
-      avatar: "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
+      avatar: {
+        format: 'png',
+        code: formatted,
+      }
     })
 
     user.password = md5(password)
