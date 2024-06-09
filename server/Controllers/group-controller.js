@@ -47,4 +47,16 @@ const findGroups = async(req, res) => {
   }
 }
 
-module.exports = {createGroup, findUserGroups, findGroups}
+const deleteGroup = async(req, res) => {
+  const {groupID} = req.params
+  try{
+    await groupModel.findByIdAndDelete(groupID)
+    console.log("WIPED OUT!")
+    res.status(200).json({message: 'ok!'})
+  } catch (error) {
+    console.log("An error occured on the server side!", error)
+    res.status(500).json({message: error})
+  }
+}
+
+module.exports = {createGroup, findUserGroups, findGroups, deleteGroup}

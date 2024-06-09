@@ -139,6 +139,24 @@ const updateUser = async(req, res) => {
   }
 }
 
+const changePassword = async(req, res) => {
+  const {userId, oldPassword, newPassword} = req.body
+  console.log("REQUEST!!!", userId, oldPassword, newPassword)
+  if(!userId || !oldPassword || !newPassword)
+    return res.status(400).json({message: `Please, fill all the inputs!`})
+
+  try{
+    const user = await userModel.findById(userId)
+    if(!user || md5(oldPassword) !== user.password)
+      return res.status(400).json({message: "Incorrect Password!"})
+    await userModel.findByIdAndUpdate(userId, {password: md5(newPassword)})
+    res.status(200).json({message: 'ok!'})
+  } catch (error) {
+    console.log("An error occured on the server side!", error)
+    res.status(500).json({message: error})
+  }
+}
+
 const deleteUser = async(req, res) => {
   const {userId} = req.params
   try{
@@ -165,4 +183,4 @@ const getRandomUser = async(req, res) => {
   }
 }
 
-module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag, updateUser, deleteUser, getRandomUser}
+module.exports = {registerUser, loginUser, findUser, getUsers, findUserTag, updateUser, deleteUser, getRandomUser, changePassword}
