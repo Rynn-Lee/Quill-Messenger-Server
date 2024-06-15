@@ -4,7 +4,7 @@ const socketConnection = (http) => {
   const socketIO = require('socket.io')(http, {
     cors: {
         // origin: [`https://quill-messenger-server.onrender.com:4000`]
-        origin: [`http://0.0.0.0:3000`, 'http://0.0.0.0:3001',`http://localhost:3000`, `http://localhost:3001`, `http://localhost:19000`, `http://localhost:13131`, `http://192.168.2.100:3000`, `exp://192.168.2.100:8081`,`exp://192.168.2.100:8082`, `http://192.168.2.100:19006`, `exp://localhost:8081`, `http://localhost:19006`, `http://26.214.103.206:3000`, `http://26.214.103.206:4000`, `http://26.214.103.206:8081`]
+        origin: [`http://0.0.0.0:3000`, 'http://0.0.0.0:3001',`http://localhost:3000`, `http://localhost:3001`, `http://localhost:3002`,`http://localhost:19000`, `http://localhost:13131`, `http://192.168.2.100:3000`,  `http://192.168.2.100:3001`, `ws://192.168.2.100:3000`, `ws://192.168.2.100:3001`,`exp://192.168.2.100:8081`,`exp://192.168.2.100:8082`, `http://192.168.2.100:19006`, `exp://localhost:8081`, `http://localhost:19006`, `http://26.214.103.206:3000`, `http://26.214.103.206:4000`, `http://26.214.103.206:8081`]
     }
   });
   
@@ -50,7 +50,7 @@ const socketConnection = (http) => {
 
     socket.on('typing', (data) => {
       if(!data?.recipientID?.length){ return }
-      
+      console.log("Typing", data)
       for(let i = 0; i < data.recipientID.length; i++){
         if (!connectedUsers[data.recipientID[i]]) { continue }
         for(let j = 0; j < connectedUsers[data.recipientID[i]].length; j++){

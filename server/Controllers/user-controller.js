@@ -7,13 +7,13 @@ const axios = require('axios')
 const registerUser = async(req, res) => {
   const { usertag, password } = req.body
   if(!usertag || !password)
-    return res.status(400).json({message: `Please, fill all the inputs!`})
+    return res.status(400).json({message: `Заполните все поля!`})
   if(password.length < 8)
-    return res.status(400).json({message: `Your password must be longer than 8 characters!`})
+    return res.status(400).json({message: `Ваш пароль должен быть длинее 8 символов!`})
   if(usertag.length > 30)
-    return res.status(400).json({message: `Your usertag must be no more than 30 characters long`})
+    return res.status(400).json({message: `Ваш тэг должен быть меньше 30-ти символов`})
   if(usertag.length < 3)
-    return res.status(400).json({message: `Your usertag must contain at least 3 characters`})
+    return res.status(400).json({message: `Ваш тэг должен быть длинее 3-х символов`})
 
   try{
     let user = await userModel.findOne({usertag: usertag})
@@ -45,13 +45,13 @@ const registerUser = async(req, res) => {
 const loginUser = async(req, res) =>{ 
   const { usertag, password } = req.body
   if(!usertag || !password)
-    return res.status(400).json({message: `Please, fill all the inputs!`})
+    return res.status(400).json({message: `Зполните все поля!`})
 
   try{
     let user = await userModel.findOne({usertag: usertag})
 
     if(!user || md5(password) !== user.password)
-      return res.status(400).json({message: "Incorrect Password or Usertag"})
+      return res.status(400).json({message: "Неверный пароль или тэг"})
 
     res.status(200).json({
       _id: user._id,
@@ -71,7 +71,7 @@ const findUser = async(req, res) => {
   try{
     const user = await userModel.findById(userId)
     if(!user)
-      return res.status(400).json({message: "No such user found!"})
+      return res.status(400).json({message: "Такого пользователя не найдено!"})
     res.status(200).json({
       _id: user._id,
       usertag: user.usertag,
@@ -128,7 +128,7 @@ const getUsers = async(req, res) => {
 const updateUser = async(req, res) => {
   const newData = req.body
   if(!newData._id){
-    return res.status(400).json({message: "Invalid set of data"})
+    return res.status(403).json({message: "Недостаточно аргументов"})
   }
   try{
     const updated = await userModel.findByIdAndUpdate(newData._id, newData)
@@ -143,7 +143,7 @@ const changePassword = async(req, res) => {
   const {userId, oldPassword, newPassword} = req.body
   console.log("REQUEST!!!", userId, oldPassword, newPassword)
   if(!userId || !oldPassword || !newPassword)
-    return res.status(400).json({message: `Please, fill all the inputs!`})
+    return res.status(400).json({message: `Заполните все поля!`})
 
   try{
     const user = await userModel.findById(userId)
@@ -163,7 +163,6 @@ const deleteUser = async(req, res) => {
     await userModel.findByIdAndDelete(userId)
     await chatModel.deleteMany({members: {$in: [userId]}})
     await messageModel.deleteMany({senderID: {$in: [userId]}})
-    console.log("WIPED OUT!")
     res.status(200).json({message: 'ok!'})
   } catch (error) {
     console.log("An error occured on the server side!", error)

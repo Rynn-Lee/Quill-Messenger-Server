@@ -50,6 +50,7 @@ const getLastestMessage = async(req, res) => {
 
 const removeMessage = async(req, res) => {
   const {messageID} = req.params
+  console.log("REMOVE MESSAGE", messageID)
   try{
     const response = await messageModel.findByIdAndDelete(messageID)
     res.status(200).json(response)

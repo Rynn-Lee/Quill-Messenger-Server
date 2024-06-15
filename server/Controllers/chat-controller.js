@@ -54,7 +54,6 @@ const findChat = async(req, res) => {
 const removeChat = async(req, res) => {
   const {chatID} = req.params
   try{
-    console.log("Deleting dis shit")
     await chatModel.findByIdAndDelete(chatID)
     await messageModel.deleteMany({chatID})
     res.status(200).json({message: 'ok!'})

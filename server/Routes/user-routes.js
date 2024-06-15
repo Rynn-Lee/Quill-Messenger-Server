@@ -6,11 +6,11 @@ const userRoutes = express.Router();
 userRoutes.post('/register', registerUser)
 userRoutes.post('/login', loginUser)
 userRoutes.post('/update', updateUser)
+userRoutes.post('/changePassword', changePassword)
 userRoutes.get('/find/:userId', findUser)
 userRoutes.get('/findtag/:userTag', findUserTag)
 userRoutes.get('/getall', getUsers)
 userRoutes.get('/delete/:userId', deleteUser)
 userRoutes.get('/randomuser', getRandomUser)
-userRoutes.post('/changePassword', changePassword)
 
 module.exports = userRoutes
