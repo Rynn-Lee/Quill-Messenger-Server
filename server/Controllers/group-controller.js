@@ -59,12 +59,14 @@ const deleteGroup = async(req, res) => {
 }
 
 const editGroup = async(req, res) => {
-  const {groupID} = req.params
   const data = req.body
-  console.log("groupID", groupID, "rest", data)
+  console.log("data", data)
+  if(!data._id){
+    return res.status(403).json({message: "Недостаточно аргументов"})
+  }
   try{
-    const response = await groupModel.findByIdAndUpdate({_id: groupID}, data)
-    res.status(200).json({response})
+    const response = await groupModel.findByIdAndUpdate(data._id, data)
+    res.status(200).json({...response, ...data})    
   } catch (error) {
     console.log("An error occured on the server side!", error)
     res.status(500).json({message: error})

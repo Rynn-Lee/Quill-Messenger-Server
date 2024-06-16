@@ -4,7 +4,7 @@ const { createGroup, findUserGroups, findGroups, deleteGroup, editGroup } = requ
 const groupRoutes = express.Router();
 
 groupRoutes.post('/create', createGroup)
-groupRoutes.post('/edit/:groupID', editGroup)
+groupRoutes.post('/edit', editGroup)
 groupRoutes.get('/delete/:groupID', deleteGroup)
 groupRoutes.get('/:userID', findUserGroups)
 groupRoutes.get('/find/:userID', findGroups)

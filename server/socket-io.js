@@ -30,7 +30,7 @@ const socketConnection = (http) => {
     socket.on('removeMessage', (data) => {
       if(!data.messageID){ return }
       console.log("removeMessage", data)
-      for(let i = 0; i < data.recipientID.length; i++){
+      for(let i = 0; i < data?.recipientID?.length; i++){
         if (!connectedUsers[data.recipientID[i]]) { continue }
         for(let j = 0; j < connectedUsers[data.recipientID[i]].length; j++){
           socketIO.to(connectedUsers[data.recipientID[i]][j]).emit('removeMessage', {chatID: data.chatID, _id: data.messageID})
